@@ -10,9 +10,7 @@ defmodule Haxir.Application do
       Haxir.Socket.Supervisor,
       Haxir.Producer,
       Haxir.Abstractor,
-      Haxir.RoomState,
-
-      Haxir.TestConsumer
+      Haxir.RoomState
     ]
 
     opts = [strategy: :one_for_one, name: Haxir.Supervisor]
