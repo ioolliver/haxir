@@ -16,7 +16,8 @@ defmodule Haxir.Browser do
 
   defp run() do
     spawn fn ->
-      System.cmd("node", ["priv/frontend/dist/index.js"])
+      path = Path.expand(__ENV__.file <> "../../../../priv/frontend/dist/index.js")
+      System.cmd("node", [path])
     end
   end
 
