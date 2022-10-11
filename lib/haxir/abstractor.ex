@@ -13,6 +13,10 @@ defmodule Haxir.Abstractor do
     {:producer_consumer, %{players: [], match: nil}, subscribe_to: [Haxir.Producer]}
   end
 
+  def handle_cast({:update_player_state, id, new_state}, state) do
+    {:noreply, [], Map.put(state, :players, update_players(state.players, id, :state, new_state))}
+  end
+  def handle_cast(_cast, state), do: {:noreply, [], state}
   def handle_call(_call, _from, state), do: {:reply, state, [], state}
 
   def handle_events(events, _from, state) do
