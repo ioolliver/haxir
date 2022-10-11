@@ -1,21 +1,189 @@
+
 # Haxir
 
-**TODO: Add description**
-
+An [Elixir](https://elixir-lang.org/) library for creating [Haxball](https://www.haxball.com/)'s headless rooms.
 ## Installation
 
-If [available in Hex](https://hex.pm/docs/publish), the package can be installed
-by adding `haxir` to your list of dependencies in `mix.exs`:
+Add `haxir` to your `mix.exs` deps
 
 ```elixir
 def deps do
-  [
-    {:haxir, "~> 0.1.0"}
-  ]
+  [{:haxir, "~> 0.0.3"}]
 end
 ```
 
-Documentation can be generated with [ExDoc](https://github.com/elixir-lang/ex_doc)
-and published on [HexDocs](https://hexdocs.pm). Once published, the docs can
-be found at <https://hexdocs.pm/haxir>.
+Then run `mix deps.get` to fetch dependencies.
 
+Now, install puppeteer in your project using
+```shell
+cd deps/haxir/priv/frontend && npm install
+```
+
+Edit or create your config file at `/config/config.exs`. To run Haxir you need to provide a headless's token:
+```elixir
+config :haxir, :room, 
+  token: "thr1.AAAAA***"
+```
+## Example usage
+
+```elixir
+defmodule ExampleConsumer do
+
+    use Haxir.Consumer
+
+    def handle_event({:player_joined, player}, _state) do
+        Haxir.Api.send_message("Welcome, #{player["name"]}!", targets: player)
+    end
+
+    def handle_event(_event) do 
+        :noop
+    end 
+
+end
+```
+
+## Events
+
+Events on Haxir follow this pattern:
+
+``def handle_event(event, state)``
+
+### State
+
+You can update the `state` by returning `{:update_state, new_state}` in the handle_event function. The initial value is a empty map.
+
+**Example:**
+
+```elixir
+def handle_event(_event, state) do
+  {:update_state, Map.put(state, :v, 1)}
+  # state will be %{v: 1} on next handle_event call
+end
+```
+
+### Event
+
+Event can be the following values:
+
+```{:player_joined, player}```
+
+Event called when a new player joins the room.
+
+```{:player_left, player}```
+
+Event called when a player leaves the room.
+
+```{:new_message, {player, message}}```
+
+Event called when a player sends a chat message. 
+
+Haxir always hide default player's message, so you must implements your own chat logic. You can simply do:
+
+```elixir
+def handle_event({:new_message, {player, message}}, _state) do
+  Haxir.Api.send_message("#{player["name"]}: #{message}")
+end
+```
+
+```{:room_linked, link}```
+
+Event called when the room link is obtained.
+
+```{:game_ticked, scores}```
+
+Event called once for every game tick (happens 30 times per second). This is useful if you want to monitor the player and ball positions without missing any ticks.
+
+This event is not called if the game is paused or stopped.
+
+```{:team_victory, scores}```
+
+Event called when a team wins.
+
+```{:ball_kicked, player}```
+
+Event called when a player kicks the ball.
+
+```{:team_scored, team}```
+
+Event called when a player leaves the room.
+
+```{:team_scored, team}```
+
+Event called when a team scores.
+
+```{:game_started, by_player}```
+
+Event called when a game starts.
+
+```{:game_stopped, by_player}```
+
+Event called when a game stops.
+
+```{:admin_changed, {changed_player, by_player}}```
+
+Event called when a player's admin rights are changed.
+
+```{:team_changed, {changed_player, by_player}}```
+
+Event called when a player team is changed.
+
+```{:player_kicked, {kicked_player, reason, by_player}}```
+
+Event called when a player has been kicked from the room. This is always called before the onPlayerLeave event.
+
+```{:player_banned, {banned_player, reason, by_player}}```
+
+Event called when a player has been banned from the room. This is always called before the onPlayerLeave event.
+
+```{:game_paused, by_player}```
+
+Event called when the game is paused.
+
+```{:game_unpaused, by_player}```
+
+Event called when the game is unpaused.
+
+```{:positions_reseted, scores}```
+
+Event called when the players and ball positions are reset after a score happens.
+
+```{:player_activity, player}```
+
+Event called when a player gives signs of activity, such as pressing a key. This is useful for detecting inactive players.
+
+```{:stadium_changed, {stadium_name, by_player}}```
+
+Event called when the stadium is changed.
+
+```{:kick_rate_limit_set, {min, rate, burst}}```
+
+Event called when the kick rate is set.
+
+```{:record_stopped, recording}```
+
+Event called when the recording is stopped.
+
+**Example:**
+
+```elixir
+defmodule TestConsumer do
+  use Haxir.Consumer
+  
+  def handle_event({:player_joined, player}, _state) do
+    Haxir.Api.send_message("Welcome, #{player["name"]}!")
+  end
+  
+  def handle_event({:player_left, player}, _state) do
+    Haxir.Api.send_message("#{player["name"]} has left! :(")
+  end
+  
+  def handle_event({:new_message, {player, message}}, _state) do
+    Haxir.Api.send_message("#{player["name"]}: #{message}")
+  end
+  
+  # Match others events
+  def handle_event(_event, _state) do
+    :noop
+  end
+end
+```
