@@ -922,19 +922,4 @@ defmodule Haxir.Api do
     get_player(id)
   end
 
-  @doc """
-    Updates a player's state.
-  """
-  def set_player_state(id, state) when is_binary(id) do
-    GenStage.cast(Haxir.Abstractor, {:update_player_state, id, state})
-    case get_player(id) do
-      nil -> nil
-      player -> Map.put(player, :state, state)
-    end
-  end
-  def set_player_state(player, state) do
-    GenStage.cast(Haxir.Abstractor, {:update_player_state, player.id, state})
-    Map.put(player, :state, state)
-  end
-
 end
