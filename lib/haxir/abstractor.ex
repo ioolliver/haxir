@@ -35,8 +35,7 @@ defmodule Haxir.Abstractor do
   end
 
   def handle_event({:player_left, player}, state) do
-    abstract_player = get_player(player, state)
-    players = List.delete(state.players, abstract_player)
+    players = Enum.filter(state.players, fn p -> p.id != player.id end)
     {{:player_left, abstract_player}, Map.put(state, :players, players)}
   end
 
