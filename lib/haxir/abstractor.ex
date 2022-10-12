@@ -141,7 +141,6 @@ defmodule Haxir.Abstractor do
     spec = Enum.filter(players, fn p -> p.team == 0 end)
     blue = Enum.filter(players, fn p -> p.team == 2 end)
     red ++ spec ++ blue
-    |> IO.inspect()
   end
 
   defp events_to_send(handled_events) do

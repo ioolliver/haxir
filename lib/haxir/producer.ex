@@ -28,7 +28,6 @@ defmodule Haxir.Producer do
   end
 
   def handle_data(data, state) do
-    IO.inspect data
     {:noreply, [], state}
   end
 
