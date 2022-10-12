@@ -226,7 +226,9 @@ defmodule Haxir.Api do
   @spec get_players() :: list(%{})
   def get_players() do
     state = get_room_state()
-    state.players
+    for player <- state.players do
+      Haxir.Helper.find_player_disc(player, state.match)
+    end
   end
 
   @doc """
@@ -921,7 +923,7 @@ defmodule Haxir.Api do
     })
     get_player(id)
   end
-  
+
   @doc """
     Updates a player's state.
   """

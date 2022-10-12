@@ -18,9 +18,7 @@ defmodule Haxir.Application do
 
       {Plug.Cowboy, scheme: :http, plug: Router, dispatch: Router.dispatch, options: [port: 4333]},
       Haxir.Socket,
-      Haxir.Browser,
-
-      Haxir.TestConsumer
+      Haxir.Browser
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html
