@@ -27,7 +27,7 @@ defmodule Haxir.Producer do
     {:noreply, [convert_event(event_info)], state}
   end
 
-  def handle_data(data, state) do
+  def handle_data(_data, state) do
     {:noreply, [], state}
   end
 
