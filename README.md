@@ -8,7 +8,7 @@ Add `haxir` to your `mix.exs` deps
 
 ```elixir
 def deps do
-  [{:haxir, "~> 0.0.3"}]
+  [{:haxir, "~> 0.1.0", git: "https://github.com/ioolliver/haxir.git"}]
 end
 ```
 
@@ -22,7 +22,10 @@ cd deps/haxir/priv/frontend && npm install
 Edit or create your config file at `/config/config.exs`. To run Haxir you need to provide a headless's token:
 ```elixir
 config :haxir, :room, 
-  token: "thr1.AAAAA***"
+  %{
+    room_name: "Haxir's room",
+    token: "thr1.AAAAA***"
+  }
 ```
 ## Example usage
 
@@ -32,10 +35,10 @@ defmodule ExampleConsumer do
     use Haxir.Consumer
 
     def handle_event({:player_joined, player}, _state) do
-        Haxir.Api.send_message("Welcome, #{player["name"]}!", targets: player)
+        Haxir.Api.send_message("Welcome, #{player.name}!", targets: player)
     end
 
-    def handle_event(_event) do 
+    def handle_event(_event, _state) do 
         :noop
     end 
 
@@ -50,7 +53,7 @@ Events on Haxir follow this pattern:
 
 ### State
 
-You can update the `state` by returning `{:update_state, new_state}` in the handle_event function. The initial value is a empty map.
+You can update the `state` by returning `{:update_state, new_state}` in the handle_event function. The initial value is an empty map.
 
 **Example:**
 
@@ -170,15 +173,15 @@ defmodule TestConsumer do
   use Haxir.Consumer
   
   def handle_event({:player_joined, player}, _state) do
-    Haxir.Api.send_message("Welcome, #{player["name"]}!")
+    Haxir.Api.send_message("Welcome, #{player.name}!")
   end
   
   def handle_event({:player_left, player}, _state) do
-    Haxir.Api.send_message("#{player["name"]} has left! :(")
+    Haxir.Api.send_message("#{player.name} has left! :(")
   end
   
   def handle_event({:new_message, {player, message}}, _state) do
-    Haxir.Api.send_message("#{player["name"]}: #{message}")
+    Haxir.Api.send_message("#{player.name}: #{message}")
   end
   
   # Match others events
