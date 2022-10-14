@@ -100,7 +100,7 @@ Event called once for every game tick (happens 30 times per second). This is use
 
 This event is not called if the game is paused or stopped.
 
-```{:clock_changed, {match, players}}```
+```{:clock_changed, scores}```
 
 Event called every time that the clock changes.
 

@@ -45,7 +45,7 @@ defmodule Haxir.Abstractor do
 
   def handle_event({:game_ticked, match}, state) do
     if state[:time] < trunc(match["scores"]["time"]) do
-      {{:clock_ticked, {convert_match(match), state.players}}, Map.put(state, :time, trunc(match["scores"]["time"]))}
+      {{:clock_changed, get_scores(state.match)}, Map.put(state, :time, trunc(match["scores"]["time"]))}
     else
       {{:game_ticked, {convert_match(match), state.players}}, Map.put(state, :time, trunc(match["scores"]["time"]))}
     end
