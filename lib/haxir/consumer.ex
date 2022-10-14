@@ -15,15 +15,15 @@ defmodule Haxir.Consumer do
       end
 
       def handle_events(events, _from, state) do
-        new_state = for event <- events do
-          case handle_event(event, state) do
-            {:update_state, new_state} -> new_state
-            _ -> :noop
-          end
+        final_state = for event <- events do
+          {:state, new_state} = handle_event(event, state)
+          new_state
         end
-        |> Enum.at(0)
+        |> Enum.reduce(fn st, acc ->
+          if is_map(acc) do Map.merge(acc, st) else st end
+        end)
 
-        {:noreply, [], if is_map(new_state) do new_state else state end}
+        {:noreply, [], final_state}
       end
 
     end

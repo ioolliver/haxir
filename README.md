@@ -34,12 +34,13 @@ defmodule ExampleConsumer do
 
     use Haxir.Consumer
 
-    def handle_event({:player_joined, player}, _state) do
-        Haxir.Api.send_message("Welcome, #{player.name}!", targets: player)
+    def handle_event({:player_joined, player}, state) do
+      Haxir.Api.send_message("Welcome, #{player.name}!", targets: player)
+      {:state, state}
     end
 
-    def handle_event(_event, _state) do 
-        :noop
+    def handle_event(_event, state) do 
+        {:state, state}
     end 
 
 end
@@ -53,13 +54,13 @@ Events on Haxir follow this pattern:
 
 ### State
 
-You can update the `state` by returning `{:update_state, new_state}` in the handle_event function. The initial value is an empty map.
+You always must return the state using the pattern `{:state, state}`.
 
 **Example:**
 
 ```elixir
 def handle_event(_event, state) do
-  {:update_state, Map.put(state, :v, 1)}
+  {:state, Map.put(state, :v, 1)}
   # state will be %{v: 1} on next handle_event call
 end
 ```
@@ -83,8 +84,9 @@ Event called when a player sends a chat message.
 Haxir always hide default player's message, so you must implements your own chat logic. You can simply do:
 
 ```elixir
-def handle_event({:new_message, {player, message}}, _state) do
+def handle_event({:new_message, {player, message}}, state) do
   Haxir.Api.send_message("#{player["name"]}: #{message}")
+  {:state, state}
 end
 ```
 
@@ -172,21 +174,24 @@ Event called when the recording is stopped.
 defmodule TestConsumer do
   use Haxir.Consumer
   
-  def handle_event({:player_joined, player}, _state) do
+  def handle_event({:player_joined, player}, state) do
     Haxir.Api.send_message("Welcome, #{player.name}!")
+    {:state, state}
   end
   
-  def handle_event({:player_left, player}, _state) do
+  def handle_event({:player_left, player}, state) do
     Haxir.Api.send_message("#{player.name} has left! :(")
+    {:state, state}
   end
   
-  def handle_event({:new_message, {player, message}}, _state) do
+  def handle_event({:new_message, {player, message}}, state) do
     Haxir.Api.send_message("#{player.name}: #{message}")
+    {:state, state}
   end
   
   # Match others events
-  def handle_event(_event, _state) do
-    :noop
+  def handle_event(_event, state) do
+    {:state, state}
   end
 end
 ```
