@@ -94,9 +94,15 @@ end
 
 Event called when the room link is obtained.
 
-```{:game_ticked, scores}```
+```{:game_ticked, {match, players}}```
 
 Event called once for every game tick (happens 30 times per second). This is useful if you want to monitor the player and ball positions without missing any ticks.
+
+This event is not called if the game is paused or stopped.
+
+```{:clock_changed, {match, players}}```
+
+Event called every time that the clock changes.
 
 This event is not called if the game is paused or stopped.
 
