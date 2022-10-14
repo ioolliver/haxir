@@ -80,7 +80,7 @@ function setEvents() {
         send("event", { event: "onGameTick", args: state });
     };
     window.room.onTeamVictory = () => {
-        send("event", { event: "onTeamVictory" });
+        send("event", { event: "onTeamVictory", args: null });
     };
     window.room.onPlayerBallKick = (player) => {
         send("event", { event: "onPlayerBallKick", args: { player } });
@@ -110,7 +110,7 @@ function setEvents() {
         send("event", { event: "onGameUnpause", args: { byPlayer } });
     };
     window.room.onPositionsReset = () => {
-        send("event", { event: "onPositionsReset" });
+        send("event", { event: "onPositionsReset", args: null });
     };
     window.room.onPlayerActivity = (player) => {
         send("event", { event: "onPlayerActivity", args: { player } });

@@ -15,6 +15,8 @@ defmodule Mix.Tasks.Haxir.Setup do
   def run(args) do
     path = get_path(args)
 
+    Mix.shell().info("Installing Frontend dependencies...")
+
     Mix.shell().cmd("cd #{path} && npm install", quiet: true)
     |> exit_status()
   end

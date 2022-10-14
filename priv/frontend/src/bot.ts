@@ -135,7 +135,7 @@ function setEvents() {
   }
 
   window.room.onTeamVictory = () => {
-    send("event", { event: "onTeamVictory"})
+    send("event", { event: "onTeamVictory", args: null})
   }
 
   window.room.onPlayerBallKick = (player : any) => {
@@ -175,7 +175,7 @@ function setEvents() {
   }
 
   window.room.onPositionsReset = () => {
-    send("event", { event: "onPositionsReset"})
+    send("event", { event: "onPositionsReset", args: null})
   }
 
   window.room.onPlayerActivity = (player : any) => {
