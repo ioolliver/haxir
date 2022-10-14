@@ -580,6 +580,21 @@ defmodule Haxir.Api do
   end
 
   @doc """
+    Restarts a match.
+
+    Returns `:ok`
+
+    # Examples
+      iex> Haxir.Api.restart_match()
+      :ok
+  """
+  @spec restart_match() :: :ok
+  def restart_match() do
+    stop_match()
+    start_match()
+  end
+
+  @doc """
     Pauses a match.
 
     Returns `:ok`
