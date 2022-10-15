@@ -47,7 +47,7 @@ defmodule Haxir.Abstractor do
     if state[:time] < trunc(match["scores"]["time"]) do
       {{:clock_changed, get_scores(state.match)}, tick_update_state(state, match)}
     else
-      {{:game_ticked, {convert_match(match), state.players}}, tick_update_state(state, match)}
+      {{:game_ticked, {convert_match(match), convert_players(state.players, match)}}, tick_update_state(state, match)}
     end
   end
 
@@ -132,6 +132,12 @@ defmodule Haxir.Abstractor do
     {event, state}
   end
 
+
+  defp convert_players(players, match) do
+    for player <- players do
+      find_player_disc(player, match)
+    end
+  end
 
   defp tick_update_state(state, match) do
     state
