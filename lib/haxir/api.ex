@@ -966,4 +966,17 @@ defmodule Haxir.Api do
     Map.put(player, :state, state)
   end
 
+  @doc """
+    Calc the distance between 2 discs.
+  """
+  def distance_between(d1, d2) do
+    deltax = abs(d1.x - d2.x)
+    deltay = abs(d1.y - d2.y)
+    distance = :math.sqrt((deltax * deltax) + (deltay * deltay))
+    distance - get_radius(d1[:radius]) - get_radius(d2[:radius])
+  end
+
+  defp get_radius(nil), do: 0
+  defp get_radius(radius), do: radius
+
 end
