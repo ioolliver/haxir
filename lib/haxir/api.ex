@@ -979,4 +979,12 @@ defmodule Haxir.Api do
   defp get_radius(nil), do: 0
   defp get_radius(radius), do: radius
 
+  @doc """
+    Emits an event.
+  """
+  def emit_event(event) do
+    GenStage.cast(Haxir.Abstractor, {:emit_event, event})
+    event
+  end
+
 end

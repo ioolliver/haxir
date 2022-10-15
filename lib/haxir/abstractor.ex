@@ -16,6 +16,9 @@ defmodule Haxir.Abstractor do
   def handle_cast({:update_player_state, id, new_state}, state) do
     {:noreply, [], Map.put(state, :players, update_players(state.players, id, :state, new_state))}
   end
+  def handle_cast({:emit_event, event}, state) do
+    {:noreply, [event], state}
+  end
   def handle_cast(_cast, state), do: {:noreply, [], state}
   def handle_call(_call, _from, state), do: {:reply, state, [], state}
 
