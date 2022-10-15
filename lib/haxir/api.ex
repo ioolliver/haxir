@@ -688,6 +688,18 @@ defmodule Haxir.Api do
   end
 
   @doc """
+    Gets Ball disc properties from a disc list.
+
+    # Examples
+
+      iex> Haxir.Api.get_ball(match.discs)
+      %{a: 1}
+  """
+  def get_ball(discs) do
+    Enum.at(discs, 0)
+  end
+
+  @doc """
     Sets a disc properties by it index.
 
     # Examples
