@@ -27,6 +27,14 @@ config :haxir, :room,
     token: "thr1.AAAAA***"
   }
 ```
+
+Finally, you can run:
+```shell
+iex -S mix
+```
+
+If you use linux, there might be [some problems](#troubleshoots).
+
 ## Example usage
 
 ```elixir
@@ -201,3 +209,11 @@ defmodule TestConsumer do
   end
 end
 ```
+
+## Troubleshoots
+
+### Chromium ghost
+
+You may need to use to kill all node processes:
+
+`iex -S mix ; killall node`
