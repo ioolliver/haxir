@@ -1,4 +1,5 @@
 defmodule Haxir.Helper do
+  alias Haxir.Struct.{Disc, Player, Scores}
 
   @doc """
     Decrypt a CONN, converting it into an IP.
@@ -18,7 +19,7 @@ defmodule Haxir.Helper do
   """
   @spec convert_player(%{}) :: %{}
   def convert_player(player) do
-    %{
+    %Player{
       id: player["id"],
       name: player["name"],
       auth: player["auth"],
@@ -49,7 +50,7 @@ defmodule Haxir.Helper do
   """
   @spec get_scores(%{}) :: %{} | nil
   def get_scores(%{"scores" => score}) do
-    %{
+    %Scores{
       red_score: score["red"],
       blue_score: score["blue"],
       time: score["time"],
@@ -76,7 +77,7 @@ defmodule Haxir.Helper do
   @spec convert_disc(%{}) :: %{} | nil
   def convert_disc(nil), do: nil
   def convert_disc(disc) do
-    %{
+    %Disc{
       x: disc["x"],
       y: disc["y"],
       x_speed: disc["xspeed"],
