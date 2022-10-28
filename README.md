@@ -85,7 +85,7 @@ Haxir always hide default player's message, so you must implements your own chat
 
 ```elixir
 def handle_event({:new_message, {player, message}}, state) do
-  Haxir.Api.send_message("#{player["name"]}: #{message}")
+  Haxir.Api.send_message("#{player.name}: #{message}")
   {:state, state}
 end
 ```
