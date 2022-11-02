@@ -28,7 +28,7 @@ defmodule Haxir.Struct.Player do
   ]
 
   defimpl String.Chars do
-    def to_string(player), do: "@#{player.name}"
+    def to_string(player), do: "#{player.name}"
   end
 
   defimpl Jason.Encoder do

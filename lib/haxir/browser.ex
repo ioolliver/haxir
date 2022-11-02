@@ -1,6 +1,8 @@
 defmodule Haxir.Browser do
   @moduledoc false
 
+  @default_frontend_path "../../../../priv/frontend/dist/index.js"
+
   use GenServer
 
   def start_link(_args) do
@@ -16,8 +18,8 @@ defmodule Haxir.Browser do
 
   defp run() do
     spawn fn ->
-      path = Path.expand(__ENV__.file <> "../../../../priv/frontend/dist/index.js")
-      System.cmd("node", [path])
+      path = Path.expand(__ENV__.file <> @default_frontend_path)
+      Mix.shell().cmd("node #{path}")
     end
   end
 

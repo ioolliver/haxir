@@ -11,6 +11,8 @@ defmodule Haxir.Api do
     ```
   """
 
+  alias Haxir.Struct
+
   defp get_room_state() do
     GenStage.call(Haxir.Abstractor, :get_state)
   end
@@ -969,15 +971,13 @@ defmodule Haxir.Api do
   @doc """
     Calc the distance between 2 discs.
   """
+  @spec distance_between(Struct.Disc.t(), Struct.Disc.t()) :: non_neg_integer()
   def distance_between(d1, d2) do
     deltax = abs(d1.x - d2.x)
     deltay = abs(d1.y - d2.y)
     distance = :math.sqrt((deltax * deltax) + (deltay * deltay))
-    distance - get_radius(d1[:radius]) - get_radius(d2[:radius])
+    distance - d1.radius - d2.radius
   end
-
-  defp get_radius(nil), do: 0
-  defp get_radius(radius), do: radius
 
   @doc """
     Emits an event.
