@@ -1,5 +1,4 @@
 defmodule Haxir.Socket do
-
   use GenServer
   @behaviour :cowboy_websocket
 
@@ -39,6 +38,7 @@ defmodule Haxir.Socket do
       {:ok, json} -> send_to_producer(json)
       error -> error
     end
+
     {:ok, state}
   end
 
@@ -76,6 +76,7 @@ defmodule Haxir.Socket do
     GenServer.cast(__MODULE__, {:send, data})
     {:ok, data}
   end
+
   def send_data(_data) do
     {:error, :not_a_map}
   end
@@ -94,8 +95,8 @@ defmodule Haxir.Socket do
   def receive_fake_data(data) when is_map(data) do
     {:ok, send_to_producer(data)}
   end
+
   def receive_fake_data(_data) do
     {:error, :not_a_map}
   end
-
 end

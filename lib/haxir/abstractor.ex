@@ -16,9 +16,11 @@ defmodule Haxir.Abstractor do
   def handle_cast({:update_player_state, id, new_state}, state) do
     {:noreply, [], Map.put(state, :players, update_players(state.players, id, :state, new_state))}
   end
+
   def handle_cast({:emit_event, event}, state) do
     {:noreply, [event], state}
   end
+
   def handle_cast(_cast, state), do: {:noreply, [], state}
   def handle_call(_call, _from, state), do: {:reply, state, [], state}
 
@@ -34,7 +36,9 @@ defmodule Haxir.Abstractor do
 
   def handle_event({:player_joined, player}, state) do
     converted_player = convert_player(player)
-    {{:player_joined, converted_player}, Map.put(state, :players, state.players ++ [converted_player])}
+
+    {{:player_joined, converted_player},
+     Map.put(state, :players, state.players ++ [converted_player])}
   end
 
   def handle_event({:player_left, player}, state) do
@@ -50,7 +54,8 @@ defmodule Haxir.Abstractor do
     if state[:time] < trunc(match["scores"]["time"]) do
       {{:clock_changed, get_scores(state.match)}, tick_update_state(state, match)}
     else
-      {{:game_ticked, {convert_match(match), convert_players(state.players, match)}}, tick_update_state(state, match)}
+      {{:game_ticked, {convert_match(match), convert_players(state.players, match)}},
+       tick_update_state(state, match)}
     end
   end
 
@@ -75,10 +80,12 @@ defmodule Haxir.Abstractor do
   end
 
   def handle_event({:admin_changed, {changed_player, by_player}}, state) do
-    updated_changed_player = get_player(changed_player, state)
-    |> Map.put(:admin, changed_player["admin"])
+    updated_changed_player =
+      get_player(changed_player, state)
+      |> Map.put(:admin, changed_player["admin"])
 
-    updated_players = update_players(state.players, changed_player["id"], :admin, changed_player["admin"])
+    updated_players =
+      update_players(state.players, changed_player["id"], :admin, changed_player["admin"])
 
     {
       {:admin_changed, {updated_changed_player, get_player(by_player, state)}},
@@ -87,8 +94,9 @@ defmodule Haxir.Abstractor do
   end
 
   def handle_event({:team_changed, {changed_player, by_player}}, state) do
-    updated_changed_player = get_player(changed_player, state)
-    |> Map.put(:team, changed_player["team"])
+    updated_changed_player =
+      get_player(changed_player, state)
+      |> Map.put(:team, changed_player["team"])
 
     {
       {:team_changed, {updated_changed_player, get_player(by_player, state)}},
@@ -99,6 +107,7 @@ defmodule Haxir.Abstractor do
   def handle_event({:player_kicked, {kicked, reason, true, by}}, state) do
     {{:player_kicked, {get_player(kicked, state), get_player(by, state), reason}}, state}
   end
+
   def handle_event({:player_kicked, {kicked, reason, false, by}}, state) do
     {{:player_banned, {get_player(kicked, state), get_player(by, state), reason}}, state}
   end
@@ -135,7 +144,6 @@ defmodule Haxir.Abstractor do
     {event, state}
   end
 
-
   defp convert_players(players, match) do
     for player <- players do
       find_player_disc(player, match)
@@ -149,8 +157,9 @@ defmodule Haxir.Abstractor do
   end
 
   defp team_changed(players, changed_player) do
-    players = update_players(players, changed_player.id, :team, changed_player.team)
-    |> List.delete(changed_player)
+    players =
+      update_players(players, changed_player.id, :team, changed_player.team)
+      |> List.delete(changed_player)
 
     reorder_players(players ++ [changed_player])
   end
@@ -173,12 +182,11 @@ defmodule Haxir.Abstractor do
       state
     end)
     |> Enum.reduce(fn new_state, acc ->
-        if is_map(acc) do
-          Map.merge(acc, new_state)
-        else
-          Map.merge(state, new_state)
-        end
-      end)
+      if is_map(acc) do
+        Map.merge(acc, new_state)
+      else
+        Map.merge(state, new_state)
+      end
+    end)
   end
-
 end
