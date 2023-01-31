@@ -36,6 +36,11 @@ defmodule Haxir.Consumer do
                 [] ->
                   %{}
 
+                [{plugin}] ->
+                  {:state, plugin_state} = apply(plugin, :handle_event, [event, state])
+
+                  plugin_state
+
                 plugins ->
                   __metadata__().plugins
                   |> Enum.map(fn {plugin} -> plugin end)
@@ -52,7 +57,7 @@ defmodule Haxir.Consumer do
 
             {:state, new_state} = handle_event(event, Map.merge(state, plugins_state))
 
-            new_state
+            # new_state
           end
           |> Enum.reduce(fn st, acc ->
             if is_map(acc) do
