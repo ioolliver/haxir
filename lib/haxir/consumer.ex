@@ -57,7 +57,7 @@ defmodule Haxir.Consumer do
 
             {:state, new_state} = handle_event(event, Map.merge(state, plugins_state))
 
-            # new_state
+            new_state
           end
           |> Enum.reduce(fn st, acc ->
             if is_map(acc) do

@@ -15,8 +15,8 @@ defmodule Haxir.Application do
 
       Haxir.Producer,
       Haxir.Abstractor,
-
-      {Plug.Cowboy, scheme: :http, plug: Router, dispatch: Router.dispatch, options: [port: 4333]},
+      {Plug.Cowboy,
+       scheme: :http, plug: Router, dispatch: Router.dispatch(), options: [port: 4333]},
       Haxir.Socket,
       Haxir.Browser
     ]
