@@ -1,6 +1,8 @@
 defmodule Haxir.Browser do
   @moduledoc false
 
+  @default_frontend_path "../../../../priv/frontend/dist/index.js"
+
   use GenServer
 
   def start_link(_args) do
