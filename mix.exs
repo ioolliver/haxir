@@ -27,7 +27,8 @@ defmodule Haxir.MixProject do
       {:cowboy, "~> 2.9"},
       {:plug_cowboy, "~> 2.5"},
       {:jason, "~> 1.4"},
-      {:gen_stage, "~> 1.1.2"}
+      {:gen_stage, "~> 1.1.2"},
+      {:rustler, "~> 0.26.0"}
     ]
   end
 end

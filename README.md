@@ -14,11 +14,6 @@ end
 
 Then run `mix deps.get` to fetch dependencies.
 
-Now, install puppeteer in your project using
-```shell
-mix haxir.setup
-```
-
 Edit or create your config file at `/config/config.exs`. To run Haxir you need to provide a headless's token:
 ```elixir
 config :haxir, :room, 
