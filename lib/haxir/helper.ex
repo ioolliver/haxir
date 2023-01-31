@@ -36,10 +36,12 @@ defmodule Haxir.Helper do
   """
   @spec get_player(%{} | non_neg_integer(), %{}) :: %{} | nil
   def get_player(nil, _state), do: nil
+
   def get_player(id, state) when is_binary(id) do
     Enum.find(state.players, fn p -> p.id == id end)
     |> find_player_disc(state.match)
   end
+
   def get_player(player, state) do
     Enum.find(state.players, fn p -> p.id == player["id"] end)
     |> find_player_disc(state.match)
@@ -58,6 +60,7 @@ defmodule Haxir.Helper do
       score_limit: score["scoreLimit"]
     }
   end
+
   def get_scores(_), do: nil
 
   @doc """
@@ -69,6 +72,7 @@ defmodule Haxir.Helper do
       convert_disc(disc)
     end)
   end
+
   def get_discs(_), do: []
 
   @doc """
@@ -76,6 +80,7 @@ defmodule Haxir.Helper do
   """
   @spec convert_disc(%{}) :: %{} | nil
   def convert_disc(nil), do: nil
+
   def convert_disc(disc) do
     %Disc{
       x: disc["x"],
@@ -99,6 +104,7 @@ defmodule Haxir.Helper do
   """
   @spec convert_match(%{}) :: %{} | nil
   def convert_match(nil), do: nil
+
   def convert_match(match) do
     %{
       scores: get_scores(match),
@@ -112,10 +118,12 @@ defmodule Haxir.Helper do
   @spec find_player_disc(%{}, %{}) :: %{}
   def find_player_disc(player, _match) when player.team == 0, do: player
   def find_player_disc(player, nil), do: player
+
   def find_player_disc(player, match) do
-    player_disc = match["playersDiscs"]
-    |> Enum.find(fn disc -> disc["id"] == player.id end)
-    |> convert_disc()
+    player_disc =
+      match["playersDiscs"]
+      |> Enum.find(fn disc -> disc["id"] == player.id end)
+      |> convert_disc()
 
     Map.put(player, :disc, player_disc)
   end
@@ -133,5 +141,4 @@ defmodule Haxir.Helper do
       end
     end)
   end
-
 end
